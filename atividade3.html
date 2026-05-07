@@ -57,6 +57,13 @@
         td {
             padding: 10px;
         }
+
+        .pesquisa {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 
@@ -75,6 +82,8 @@
             </form>
         </div>
     </div>
+
+    <div class="pesquisa"></div>
 
     <div class="container">
         <div class="lista">
@@ -102,7 +111,7 @@
 
         const produtos = carregarLocalStorage();
 
-        function carregarProdutos() {
+        function carregarProdutos(parametro) {
             const table = document.createElement("table");
             if (produtos.length === 0) {
                 list.innerHTML = "Lista Vazia";
@@ -170,12 +179,12 @@
 
                 excluirProduto.addEventListener("click", event => {
                     const confirmar = prompt("Gostaria mesmo de excluir? (1- Sim / 2 - Não)")
-                    if (confirmar == 1 ) {
+                    if (confirmar == 1) {
                         produtos.splice(indice, 1)
                         salvarLocalStorage(produtos);
                         alert("Produto Excluido");
                         carregarProdutos();
-                    } else if(confirmar == 2) {
+                    } else if (confirmar == 2) {
                         return
                     } else {
                         alert("Resposta não reconhecida, retornando")
@@ -206,6 +215,63 @@
         })
 
         carregarProdutos();
+
+        const pesquisa = document.querySelector(".pesquisa");
+
+        function pesquisarProdutos(evento) {
+
+            const input = document.createElement("input");
+            input.placeholder = "Digite o nome do produto";
+
+            pesquisa.appendChild(input);
+
+            input.addEventListener("input", event => {
+
+                const busca = event.target.value.toLowerCase();
+
+                const encontrarProduto = produtos.filter(produto =>
+                    produto.produto.toLowerCase().includes(busca)
+                );
+
+                list.innerHTML = "";
+
+                if (encontrarProduto.length === 0) {
+                    list.textContent = "Nenhum produto encontrado";
+                    return;
+                }
+
+                const table = document.createElement("table");
+
+                table.border = "5";
+
+                table.innerHTML = `
+            <tr>
+                <th>Produto</th>
+                <th>Preço</th>
+                <th>Quantidade</th>
+            </tr>
+        `;
+
+                encontrarProduto.forEach(produto => {
+
+                    const tr = document.createElement("tr");
+
+                    tr.innerHTML = `
+                <td>${produto.produto}</td>
+                <td>${produto.preco}</td>
+                <td>${produto.quantidade}</td>
+            `;
+
+                    table.appendChild(tr);
+                });
+
+                list.appendChild(table);
+            });
+        }
+
+        if(produtos.length != 0){
+            pesquisarProdutos();
+        }
     </script>
 </body>
 
