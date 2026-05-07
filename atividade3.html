@@ -169,9 +169,17 @@
                 })
 
                 excluirProduto.addEventListener("click", event => {
-                    produtos.splice(indice, 1)
-                    salvarLocalStorage(produtos);
-                    carregarProdutos();
+                    const confirmar = prompt("Gostaria mesmo de excluir? (1- Sim / 2 - Não)")
+                    if (confirmar == 1 ) {
+                        produtos.splice(indice, 1)
+                        salvarLocalStorage(produtos);
+                        alert("Produto Excluido");
+                        carregarProdutos();
+                    } else if(confirmar == 2) {
+                        return
+                    } else {
+                        alert("Resposta não reconhecida, retornando")
+                    }
                 })
             })
 
