@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de filmes</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 1rem;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 40vh;
+        }
+
+        .formulario {
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+            margin: 30px;
+            border: 3px solid black;
+            height: 200px;
+            width: 400px;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            border-radius: 20px;
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.699);
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: auto 2fr;
+            gap: 6px;
+        }
+
+        .form button {
+            grid-column: span 2;
+            cursor: pointer;
+        }
+
+        .listarFilmes {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        .listar {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            background-color: rgba(255, 228, 196, 0.568);
+            padding: 10px;
+            gap: 10px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="formulario">
+            <h2>Lista de Filmes</h2>
+            <form class="form">
+                <label for="titulo">Titulo:</label>
+                <input type="text" name="titulo">
+                <label for="genero">Genero:</label>
+                <input type="text" name="genero">
+                <label for="nota">Nota:</label>
+                <input type="number" name="nota">
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <div class="listarFilmes">
+        <ul class="listar"></ul>
+    </div>
+
+    <script>
+
+        /* get Elementos */
+        const form = document.querySelector(".form");
+        const listar = document.querySelector(".listar");
+
+        /* Funções de localStorage */
+        function carregarListaNavegador () {
+            const get = localStorage.getItem("lista");
+            if(get){
+                return JSON.parse(get);
+            }else{
+                return [];
+            }
+        }
+
+        function salvarListaNavegador (lista) {
+            return localStorage.setItem("lista", JSON.stringify(lista));
+        }
+
+        /* variavel de array de objeto */
+        let listaTemporaria = carregarListaNavegador();
+
+        /* Criação do li para renderizar */
+        function carregarListar () {
+
+            listaTemporaria = carregarListaNavegador();
+            
+            listar.innerHTML = "";
+
+            listaTemporaria.forEach(filme => {
+                const li = document.createElement("li");
+                li.textContent = `Titulo: ${filme.titulo} | Genero: ${filme.genero} | Nota: ${filme.nota}`
+                listar.appendChild(li);
+            })
+        }
+
+        /* Renderizar */
+        carregarListar();
+
+        /* Adicionar no filme a lista */
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+
+            const novoFilme = {
+                titulo: event.target.titulo.value,
+                genero: event.target.genero.value,
+                nota: event.target.nota.value
+            }
+
+            listaTemporaria.push(novoFilme);
+
+            salvarListaNavegador(listaTemporaria);
+            carregarListar();
+            form.reset();
+        })
+    </script>
+</body>
+</html>>

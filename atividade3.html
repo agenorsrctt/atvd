@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+            width: 100vw;
+        }
+
+        .formulario {
+            display: flex;
+            flex-direction: column;
+            flex-wrap: wrap;
+            border: 3px solid black;
+            padding: 30px;
+            gap: 10px;
+            border-radius: 20px;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .form {
+            display: grid;
+            grid-template-columns: auto 2fr;
+            gap: 5px;
+        }
+
+        .form button {
+            grid-column: span 2;
+        }
+
+        .list table {
+            padding: 10px;
+            margin: 10px;
+            border-radius: 20px;
+        }
+
+        .list table th,
+        td {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="formulario">
+            <h2>Controle de Estoque</h2>
+            <form class="form">
+                <label for="produto">Produto:</label>
+                <input type="text" name="produto" placeholder="Digite o nome do produto" required>
+                <label for="preco">Preço:</label>
+                <input type="number" name="preco" placeholder="Digite o valor do produto" required>
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" name="quantidade" placeholder="Digite a quantidade do produto" required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="lista">
+            <div class="list"></div>
+        </div>
+    </div>
+
+    <script>
+        const form = document.querySelector(".form");
+        const list = document.querySelector(".list");
+
+
+        function carregarLocalStorage() {
+            const getList = localStorage.getItem("lista");
+            if (getList) {
+                return JSON.parse(getList);
+            } else {
+                return [];
+            }
+        }
+
+        function salvarLocalStorage(parametro) {
+            return localStorage.setItem("lista", JSON.stringify(parametro))
+        }
+
+        const produtos = carregarLocalStorage();
+
+        function carregarProdutos() {
+            const table = document.createElement("table");
+            if (produtos.length === 0) {
+                list.innerHTML = "Lista Vazia";
+                return
+            }
+
+            list.innerHTML = ""
+
+            table.border = "5"
+            table.innerHTML = `
+                <tr> 
+                    <th>Produto</th> 
+                    <th>Preço</th> 
+                    <th>Quantidade</th> 
+                    <th>Config</th> 
+                </tr>
+                `;
+
+            produtos.forEach((produto, indice) => {
+                const tr = document.createElement("tr");
+                const tdProduto = document.createElement("td");
+                const tdPreco = document.createElement("td");
+                const tdQuantidade = document.createElement("td");
+
+                const configEditar = document.createElement("td");
+                const configExcluir = document.createElement("td");
+                const editarProduto = document.createElement("button");
+                const excluirProduto = document.createElement("button");
+
+                editarProduto.textContent = "Editar";
+                excluirProduto.textContent = "Excluir"
+
+                tdProduto.textContent = produto.produto;
+                tdPreco.textContent = produto.preco;
+                tdQuantidade.textContent = produto.quantidade;
+
+                tr.appendChild(tdProduto);
+                tr.appendChild(tdPreco);
+                tr.appendChild(tdQuantidade);
+
+                configEditar.appendChild(editarProduto);
+                configExcluir.appendChild(excluirProduto);
+                tr.appendChild(configEditar);
+                tr.appendChild(configExcluir);
+
+                table.appendChild(tr);
+
+                editarProduto.addEventListener("click", event => {
+                    const novoNome = prompt("Digite o nome do Produto", produto.produto);
+                    const novoPreco = prompt("Digite o preço", produto.preco);
+                    const novaQuantidade = prompt("Digite a quantidade", produto.quantidade);
+
+                    if (novoNome != "" && novoPreco > 0 && novaQuantidade > 0) {
+
+                        produtos[indice].produto = novoNome;
+                        produtos[indice].preco = novoPreco;
+                        produtos[indice].quantidade = novaQuantidade;
+
+                        salvarLocalStorage(produtos);
+                        carregarProdutos();
+                    } else {
+                        alert("Erro ao editar, os campos não podem ficar vazios!")
+                    }
+                })
+
+                excluirProduto.addEventListener("click", event => {
+                    produtos.splice(indice, 1)
+                    salvarLocalStorage(produtos);
+                    carregarProdutos();
+                })
+            })
+
+            list.appendChild(table);
+        }
+
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+
+            const novoProduto = {
+                produto: event.target.produto.value,
+                preco: event.target.preco.value,
+                quantidade: event.target.quantidade.value
+            }
+
+            if (novoProduto.produto != "" && novoProduto.preco > 0 && novoProduto.quantidade > 0) {
+                produtos.push(novoProduto);
+                salvarLocalStorage(produtos);
+                carregarProdutos();
+                form.reset();
+            } else {
+                alert("Erro ao adicionar, nenhum produto cadastrado!")
+            }
+        })
+
+        carregarProdutos();
+    </script>
+</body>
+
+</html>
