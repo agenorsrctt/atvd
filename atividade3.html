@@ -112,7 +112,7 @@
                 carregarProdutos();
                 if (produtos.length === 1) {
                     pesquisarProdutos(produtos);
-                }
+                }produtos
                 form.reset();
             } else {
                 alert("Erro ao adicionar, nenhum produto cadastrado!")
@@ -195,9 +195,9 @@
 
                     if (novoNome != "" && novoPreco > 0 && novaQuantidade > 0) {
 
-                        parametro[indice].produto = novoNome;
-                        parametro[indice].preco = novoPreco;
-                        parametro[indice].quantidade = novaQuantidade;
+                        produtos[indice].produto = novoNome;
+                        produtos[indice].preco = novoPreco;
+                        produtos[indice].quantidade = novaQuantidade;
 
                         salvarLocalStorage(produtos);
                         carregarProdutos();
@@ -209,7 +209,7 @@
                 excluirProduto.addEventListener("click", event => {
                     const confirmar = prompt("Gostaria mesmo de excluir? (1- Sim / 2 - Não)")
                     if (confirmar == 1) {
-                        parametro.splice(indice, 1)
+                        produtos.splice(indice, 1)
                         salvarLocalStorage(produtos);
                         alert("Produto Excluido");
                         carregarProdutos();
@@ -236,9 +236,12 @@
             pesquisa.innerHTML = "";
 
             const input = document.createElement("input");
+            const h3 = document.createElement("h3");
 
+            h3.textContent = "Barra de Pesquisa"
             input.placeholder = "Digite o nome do produto";
 
+            pesquisa.appendChild(h3);
             pesquisa.appendChild(input);
 
             input.addEventListener("input", event => {
