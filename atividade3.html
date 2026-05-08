@@ -198,7 +198,7 @@
                     if (novoNome != "" && novoPreco > 0 && novaQuantidade > 0) {
 
                         produtos[indiceReal].produto = novoNome.toUpperCase();
-                        produtos[indiceReal].preco = Number(novoPreco);
+                        produtos[indiceReal].preco = Number(novoPreco.replace(",", "."));
                         produtos[indiceReal].quantidade = Number(novaQuantidade);
 
                         salvarLocalStorage(produtos);
