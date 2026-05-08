@@ -75,7 +75,7 @@
                 <label for="produto">Produto:</label>
                 <input type="text" name="produto" placeholder="Digite o nome do produto" required>
                 <label for="preco">Preço:</label>
-                <input type="number" name="preco" placeholder="Digite o valor do produto" required>
+                <input type="number" name="preco" step="0.01" placeholder="Digite o valor do produto" required>
                 <label for="quantidade">Quantidade:</label>
                 <input type="number" name="quantidade" placeholder="Digite a quantidade do produto" required>
                 <button type="submit">Enviar</button>
@@ -101,9 +101,9 @@
             event.preventDefault();
 
             const novoProduto = {
-                produto: event.target.produto.value,
-                preco: event.target.preco.value,
-                quantidade: event.target.quantidade.value
+                produto: event.target.produto.value.toUpperCase(),
+                preco: Number(event.target.preco.value),
+                quantidade: Number(event.target.quantidade.value)
             }
 
             if (novoProduto.produto != "" && novoProduto.preco > 0 && novoProduto.quantidade > 0) {
@@ -112,7 +112,7 @@
                 carregarProdutos();
                 if (produtos.length === 1) {
                     pesquisarProdutos(produtos);
-                }produtos
+                }
                 form.reset();
             } else {
                 alert("Erro ao adicionar, nenhum produto cadastrado!")
@@ -153,13 +153,15 @@
             table.innerHTML = `
                 <tr> 
                     <th>Produto</th> 
-                    <th>Preço</th> 
-                    <th>Quantidade</th> 
+                    <th>Preço (R$)</th> 
+                    <th>Quantidade (UN)</th> 
                     <th>Config</th> 
                 </tr>
                 `;
 
-            parametro.forEach((produto, indice) => {
+            parametro.forEach((produto) => {
+                const indiceReal = produtos.indexOf(produto);
+
                 const tr = document.createElement("tr");
                 const tdProduto = document.createElement("td");
                 const tdPreco = document.createElement("td");
@@ -174,7 +176,7 @@
                 excluirProduto.textContent = "Excluir"
 
                 tdProduto.textContent = produto.produto;
-                tdPreco.textContent = produto.preco;
+                tdPreco.textContent = `R$ ${produto.preco}`;
                 tdQuantidade.textContent = produto.quantidade;
 
                 tr.appendChild(tdProduto);
@@ -195,9 +197,9 @@
 
                     if (novoNome != "" && novoPreco > 0 && novaQuantidade > 0) {
 
-                        produtos[indice].produto = novoNome;
-                        produtos[indice].preco = novoPreco;
-                        produtos[indice].quantidade = novaQuantidade;
+                        produtos[indiceReal].produto = novoNome.toUpperCase();
+                        produtos[indiceReal].preco = Number(novoPreco);
+                        produtos[indiceReal].quantidade = Number(novaQuantidade);
 
                         salvarLocalStorage(produtos);
                         carregarProdutos();
@@ -209,7 +211,7 @@
                 excluirProduto.addEventListener("click", event => {
                     const confirmar = prompt("Gostaria mesmo de excluir? (1- Sim / 2 - Não)")
                     if (confirmar == 1) {
-                        produtos.splice(indice, 1)
+                        produtos.splice(indiceReal, 1)
                         salvarLocalStorage(produtos);
                         alert("Produto Excluido");
                         carregarProdutos();
@@ -224,10 +226,46 @@
                 })
             })
 
+            if (produtos.length > 1) {
+
+                /* função de calcudo reduce */
+                function calcTotal(array, propriedade) {
+                    return array.reduce((total, atual) => {
+                        return total += Number(atual[propriedade]);
+                    }, 0)
+                }
+
+                const precoTotal = calcTotal(produtos, "preco");
+                const qntTotal = calcTotal(produtos, "quantidade");
+
+                const trTotal = document.createElement("tr");
+                const trTotalValores = document.createElement("tr");
+
+                trTotal.innerHTML = `
+                        <th>Total de Produto</th> 
+                        <th>Preço Total (R$)</th> 
+                        <th>Quantidade Total (UN)</th> 
+                `;
+
+
+                trTotalValores.innerHTML = `
+                        <td>${produtos.length}</td> 
+                        <td>R$ ${precoTotal}</td> 
+                        <td>${qntTotal}</td> 
+                `;
+
+                console.log("Valor total do preço", precoTotal)
+                console.log("Valor total da quantidade", qntTotal)
+
+                table.appendChild(trTotal);
+                table.appendChild(trTotalValores);
+            }
+
             list.appendChild(table);
         }
 
         /* Chamada da função */
+        console.log(produtos)
         carregarProdutos(produtos);
 
         /* Função para pesquisa de produtos */
