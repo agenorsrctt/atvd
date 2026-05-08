@@ -94,8 +94,32 @@
     <script>
         const form = document.querySelector(".form");
         const list = document.querySelector(".list");
+        const pesquisa = document.querySelector(".pesquisa");
 
+        /* Adicionar item a tabela */
+        form.addEventListener("submit", event => {
+            event.preventDefault();
 
+            const novoProduto = {
+                produto: event.target.produto.value,
+                preco: event.target.preco.value,
+                quantidade: event.target.quantidade.value
+            }
+
+            if (novoProduto.produto != "" && novoProduto.preco > 0 && novoProduto.quantidade > 0) {
+                produtos.push(novoProduto);
+                salvarLocalStorage(produtos);
+                carregarProdutos();
+                if (produtos.length === 1) {
+                    pesquisarProdutos(produtos);
+                }
+                form.reset();
+            } else {
+                alert("Erro ao adicionar, nenhum produto cadastrado!")
+            }
+        })
+
+        /* Função para carregar tabela salva no navagegador */
         function carregarLocalStorage() {
             const getList = localStorage.getItem("lista");
             if (getList) {
@@ -105,14 +129,19 @@
             }
         }
 
+        /* Função para salvar tabela na memoria do navegador */
         function salvarLocalStorage(parametro) {
             return localStorage.setItem("lista", JSON.stringify(parametro))
         }
 
+        /* Variavel global com a lista dos produtos */
         const produtos = carregarLocalStorage();
 
-        function carregarProdutos(parametro) {
+        /* Função para percorrer os produtos/criar a tabela/criar botoes */
+        function carregarProdutos(parametro = produtos) {
+
             const table = document.createElement("table");
+
             if (produtos.length === 0) {
                 list.innerHTML = "Lista Vazia";
                 return
@@ -130,7 +159,7 @@
                 </tr>
                 `;
 
-            produtos.forEach((produto, indice) => {
+            parametro.forEach((produto, indice) => {
                 const tr = document.createElement("tr");
                 const tdProduto = document.createElement("td");
                 const tdPreco = document.createElement("td");
@@ -166,9 +195,9 @@
 
                     if (novoNome != "" && novoPreco > 0 && novaQuantidade > 0) {
 
-                        produtos[indice].produto = novoNome;
-                        produtos[indice].preco = novoPreco;
-                        produtos[indice].quantidade = novaQuantidade;
+                        parametro[indice].produto = novoNome;
+                        parametro[indice].preco = novoPreco;
+                        parametro[indice].quantidade = novaQuantidade;
 
                         salvarLocalStorage(produtos);
                         carregarProdutos();
@@ -180,10 +209,13 @@
                 excluirProduto.addEventListener("click", event => {
                     const confirmar = prompt("Gostaria mesmo de excluir? (1- Sim / 2 - Não)")
                     if (confirmar == 1) {
-                        produtos.splice(indice, 1)
+                        parametro.splice(indice, 1)
                         salvarLocalStorage(produtos);
                         alert("Produto Excluido");
                         carregarProdutos();
+                        if (produtos.length === 0) {
+                            pesquisa.innerHTML = "";
+                        }
                     } else if (confirmar == 2) {
                         return
                     } else {
@@ -195,32 +227,16 @@
             list.appendChild(table);
         }
 
-        form.addEventListener("submit", event => {
-            event.preventDefault();
+        /* Chamada da função */
+        carregarProdutos(produtos);
 
-            const novoProduto = {
-                produto: event.target.produto.value,
-                preco: event.target.preco.value,
-                quantidade: event.target.quantidade.value
-            }
+        /* Função para pesquisa de produtos */
+        function pesquisarProdutos(parametro) {
 
-            if (novoProduto.produto != "" && novoProduto.preco > 0 && novoProduto.quantidade > 0) {
-                produtos.push(novoProduto);
-                salvarLocalStorage(produtos);
-                carregarProdutos();
-                form.reset();
-            } else {
-                alert("Erro ao adicionar, nenhum produto cadastrado!")
-            }
-        })
-
-        carregarProdutos();
-
-        const pesquisa = document.querySelector(".pesquisa");
-
-        function pesquisarProdutos(evento) {
+            pesquisa.innerHTML = "";
 
             const input = document.createElement("input");
+
             input.placeholder = "Digite o nome do produto";
 
             pesquisa.appendChild(input);
@@ -229,48 +245,14 @@
 
                 const busca = event.target.value.toLowerCase();
 
-                const encontrarProduto = produtos.filter(produto =>
-                    produto.produto.toLowerCase().includes(busca)
-                );
+                const produtosFiltrados = parametro.filter(produto => produto.produto.toLowerCase().includes(busca));
 
-                list.innerHTML = "";
-
-                if (encontrarProduto.length === 0) {
-                    list.textContent = "Nenhum produto encontrado";
-                    return;
-                }
-
-                const table = document.createElement("table");
-
-                table.border = "5";
-
-                table.innerHTML = `
-            <tr>
-                <th>Produto</th>
-                <th>Preço</th>
-                <th>Quantidade</th>
-            </tr>
-        `;
-
-                encontrarProduto.forEach(produto => {
-
-                    const tr = document.createElement("tr");
-
-                    tr.innerHTML = `
-                <td>${produto.produto}</td>
-                <td>${produto.preco}</td>
-                <td>${produto.quantidade}</td>
-            `;
-
-                    table.appendChild(tr);
-                });
-
-                list.appendChild(table);
+                carregarProdutos(produtosFiltrados);
             });
         }
 
-        if(produtos.length != 0){
-            pesquisarProdutos();
+        if (produtos.length != 0) {
+            pesquisarProdutos(produtos);
         }
     </script>
 </body>
