@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Estoque</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="formulario">
+            <h2>Controle de Estoque</h2>
+            <form class="form">
+                <label for="produto">Produto:</label>
+                <input type="text" name="produto" placeholder="Digite o nome do produto" required>
+                <label for="preco">Preço:</label>
+                <input type="number" name="preco" step="0.01" placeholder="Digite o valor do produto" required>
+                <label for="quantidade">Quantidade:</label>
+                <input type="number" name="quantidade" placeholder="Digite a quantidade do produto" required>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="pesquisa"></div>
+
+    <div class="container">
+        <div class="lista">
+            <div class="list"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+
+    <footer>
+        <a href="https://github.com/agenorsrctt/" target="_blank">GitHub</a><br>
+        <a href="https://www.linkedin.com/in/agenor-s-rodrigues-b12473368/" target="_blank">LinkedIn</a>
+        <h2>Agenor S. Rodrigues</h2>
+    </footer>
+</body>
+
+</html>
