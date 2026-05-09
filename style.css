@@ -255,35 +255,29 @@ footer {
     padding: 25px 15px;
 
     background: #222;
-    color: white;
-
-    text-align: center;
 
     border-top: 4px solid #4a90e2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
-footer h2 {
-    font-size: 20px;
-    margin-bottom: 10px;
+.github-link,
+.linkedin-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-footer p {
-    font-size: 15px;
-    color: #ccc;
-}
-
-footer a {
-    color: #4a90e2;
-
-    text-decoration: none;
-
-    font-weight: bold;
-
+.github-link img,
+.linkedin-link img {
     transition: 0.3s;
 }
 
-footer a:hover {
-    color: #82bfff;
-
-    text-decoration: underline;
+.github-link img:hover,
+.linkedin-link img:hover {
+    transform: translateY(-3px) scale(1.03);
 }
