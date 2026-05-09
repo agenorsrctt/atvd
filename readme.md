@@ -2,6 +2,12 @@
 
 Projeto de CRUD desenvolvido com HTML, CSS e JavaScript puro para gerenciamento simples de estoque diretamente no navegador.
 
+## 🌐 Deploy
+
+Acesse o projeto online:
+
+https://agenorsrctt.github.io/sistema-de-estoque/
+
 ---
 
 ## 🚀 Funcionalidades
