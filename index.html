@@ -5,7 +5,293 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Estoque</title>
-    <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+
+        body {
+            background: #f4f6f9;
+            color: #333;
+            min-height: 100vh;
+
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Containers */
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 30px;
+        }
+
+        /* Formulário */
+
+        .formulario {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.1);
+
+            border: 1px solid #ddd;
+        }
+
+        .formulario h2 {
+            text-align: center;
+            font-size: 32px;
+            color: #222;
+        }
+
+        /* Form */
+
+        .form {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .form label {
+            font-weight: bold;
+            color: #444;
+        }
+
+        .form input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+
+            outline: none;
+
+            transition: 0.3s;
+        }
+
+        .form input:focus {
+            border-color: #4a90e2;
+
+            box-shadow:
+                0 0 5px rgba(74, 144, 226, 0.4);
+        }
+
+        /* Botão principal */
+
+        .form button {
+            grid-column: span 2;
+
+            padding: 14px;
+
+            border: none;
+            border-radius: 10px;
+
+            background: #4a90e2;
+            color: white;
+
+            font-size: 18px;
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .form button:hover {
+            background: #357abd;
+        }
+
+        /* Pesquisa */
+
+        .pesquisa {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            margin-top: 10px;
+        }
+
+        .pesquisa h3 {
+            font-size: 24px;
+        }
+
+        .pesquisa input {
+            width: 300px;
+
+            padding: 12px;
+
+            border-radius: 10px;
+            border: 1px solid #ccc;
+
+            outline: none;
+        }
+
+        .pesquisa input:focus {
+            border-color: #4a90e2;
+
+            box-shadow:
+                0 0 5px rgba(74, 144, 226, 0.4);
+        }
+
+        /* Lista */
+
+        .lista {
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .list table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            background: white;
+
+            overflow: hidden;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Cabeçalho */
+
+        .list table th {
+            background: #4a90e2;
+            color: white;
+
+            padding: 16px;
+
+            font-size: 18px;
+        }
+
+        /* Linhas */
+
+        .list table td {
+            padding: 14px;
+            text-align: center;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Hover nas linhas */
+
+        .list table tr:hover {
+            background: #f7faff;
+        }
+
+        /* Botões da tabela */
+
+        .list table button {
+            padding: 5px 10px;
+
+            border: none;
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+        }
+
+        /* Editar */
+
+        .list table button:first-child {
+            background: #27ae60;
+            color: white;
+        }
+
+        .list table button:first-child:hover {
+            background: #1f8a4c;
+        }
+
+        /* Excluir */
+
+        .list table button:last-child {
+            background: #4a90e2;
+            color: white;
+        }
+
+        .list table button:last-child:hover {
+            background: #c0392b;
+        }
+
+        /* Responsividade */
+
+        @media (max-width: 768px) {
+
+            .form {
+                grid-template-columns: 1fr;
+            }
+
+            .form button {
+                grid-column: span 1;
+            }
+
+            .pesquisa input {
+                width: 100%;
+            }
+
+            .list table {
+                font-size: 14px;
+            }
+
+            .list table th,
+            .list table td {
+                padding: 10px;
+            }
+        }
+
+        /* Footer */
+
+        footer {
+            margin-top: auto;
+
+            padding: 25px 15px;
+
+            background: #222;
+            color: white;
+
+            text-align: center;
+
+            border-top: 4px solid #4a90e2;
+        }
+
+        .github-link,
+        .linkedin-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .github-link img,
+        .linkedin-link img {
+            transition: 0.3s;
+        }
+
+        .github-link img:hover,
+        .linkedin-link img:hover {
+            transform: translateY(-3px) scale(1.03);
+        }
+    </style>
 </head>
 
 <body>
@@ -34,21 +320,269 @@
 
     <footer>
 
-    <p class="linkedin-link">
-        <a href="https://www.linkedin.com/in/agenorsrctt/" target="_blank">
-            <img src="https://img.shields.io/badge/LinkedIn-Agenor%20S.%20Rodrigues-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white">
-        </a>
-    </p>
+        <p class="linkedin-link">
+            <a href="https://www.linkedin.com/in/agenorsrctt/" target="_blank">
+                <img
+                    src="https://img.shields.io/badge/LinkedIn-Agenor%20S.%20Rodrigues-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white">
+            </a>
+        </p>
 
-    <p class="github-link">
-        <a href="https://github.com/agenorsrctt" target="_blank">
-            <img src="https://img.shields.io/badge/GitHub-agenorsrctt-181717?style=for-the-badge&logo=github">
-        </a>
-    </p>
+        <p class="github-link">
+            <a href="https://github.com/agenorsrctt" target="_blank">
+                <img src="https://img.shields.io/badge/GitHub-agenorsrctt-181717?style=for-the-badge&logo=github">
+            </a>
+        </p>
 
-</footer>
+    </footer>
 
-    <script src="script.js"></script>
+    <script>
+        const form = document.querySelector(".form");
+        const list = document.querySelector(".list");
+        const pesquisa = document.querySelector(".pesquisa");
+
+        /* Adicionar item a tabela */
+        form.addEventListener("submit", event => {
+            event.preventDefault();
+
+            const novoProduto = {
+                produto: event.target.produto.value.toUpperCase(),
+                preco: Number(event.target.preco.value),
+                quantidade: Number(event.target.quantidade.value)
+            }
+
+            if (verificarProdutoExistente(novoProduto, "produto")) {
+                if (novoProduto.produto != "" && novoProduto.preco > 0 && novoProduto.quantidade > 0) {
+                    produtos.push(novoProduto);
+                    salvarLocalStorage(produtos);
+                    carregarProdutos();
+                    if (produtos.length === 1) {
+                        pesquisarProdutos(produtos);
+                    }
+                    form.reset();
+                } else {
+                    alert("Erro ao adicionar, nenhum produto cadastrado!")
+                }
+            }
+        })
+
+        /* Função para carregar tabela salva no navagegador */
+        function carregarLocalStorage() {
+            const getList = localStorage.getItem("lista");
+            if (getList) {
+                return JSON.parse(getList);
+            } else {
+                return [];
+            }
+        }
+
+        /* Função para salvar tabela na memoria do navegador */
+        function salvarLocalStorage(parametro) {
+            return localStorage.setItem("lista", JSON.stringify(parametro))
+        }
+
+        /* Variavel global com a lista dos produtos */
+        const produtos = carregarLocalStorage();
+
+        /* Função para percorrer os produtos/criar a tabela/criar botoes */
+        function carregarProdutos(parametro = produtos) {
+
+            const table = document.createElement("table");
+
+            if (produtos.length === 0) {
+                list.innerHTML = "Lista Vazia";
+                return
+            }
+
+            list.innerHTML = ""
+
+            table.border = "5"
+            table.innerHTML = `
+                <tr> 
+                    <th>
+                    Produto
+                    <button class="ordenarNome">↑</button>
+                    </th> 
+
+                    <th>
+                    Preço (R$)
+                    <button class="ordenarPreco">↑</button>
+                    </th> 
+
+                    <th>
+                    Quantidade (UN)
+                    <button class="ordenarQuant">↑</button>
+                    </th> 
+
+                    <th>Config</th> 
+                </tr>
+                `;
+
+            /* Adicionando botao de ordenação */
+
+            const ordenarNome = table.querySelector(".ordenarNome");
+            const ordenarPreco = table.querySelector(".ordenarPreco");
+            const ordenarQuantidade = table.querySelector(".ordenarQuant");
+
+            ordenarNome.addEventListener("click", event => {
+                carregarProdutos(
+                    [...produtos].sort((a, b) =>
+                        a.produto.localeCompare(b.produto)
+                    )
+                );
+            })
+            ordenarPreco.addEventListener("click", event => carregarProdutos(ordenarTabela(produtos, "preco")))
+            ordenarQuantidade.addEventListener("click", event => carregarProdutos(ordenarTabela(produtos, "quantidade")))
+
+            parametro.forEach((produto) => {
+
+                const indiceReal = produtos.indexOf(produto);
+
+                const tr = document.createElement("tr");
+
+                const editarProduto = document.createElement("button");
+                const excluirProduto = document.createElement("button");
+
+                editarProduto.textContent = "Editar";
+                excluirProduto.textContent = "Excluir"
+
+                tr.innerHTML = `
+                    <td>${produto.produto}</td>
+                    <td>R$ ${produto.preco}</td>
+                    <td>${produto.quantidade}</td>
+                `;
+
+                tr.appendChild(editarProduto);
+                tr.appendChild(excluirProduto);
+
+                table.appendChild(tr);
+
+                editarProduto.addEventListener("click", event => {
+                    const novoNome = prompt("Digite o nome do Produto", produto.produto);
+                    const novoPreco = prompt("Digite o preço", produto.preco);
+                    const novaQuantidade = prompt("Digite a quantidade", produto.quantidade);
+
+                    if (novoNome != "" && novoPreco > 0 && novaQuantidade > 0) {
+
+                        produtos[indiceReal].produto = novoNome.toUpperCase();
+                        produtos[indiceReal].preco = Number(novoPreco.replace(",", "."));
+                        produtos[indiceReal].quantidade = Number(novaQuantidade);
+
+                        salvarLocalStorage(produtos);
+                        carregarProdutos();
+                    } else {
+                        alert("Erro ao editar, os campos não podem ficar vazios!")
+                    }
+                })
+
+                excluirProduto.addEventListener("click", event => {
+                    const confirmar = confirm("Deseja excluir o produto?")
+
+                    if (confirmar) {
+                        produtos.splice(indiceReal, 1);
+                        salvarLocalStorage(produtos);
+                        alert("Produto Excluido");
+                        carregarProdutos();
+                        if (produtos.length === 0) {
+                            pesquisa.innerHTML = "";
+                        }
+                    } else {
+                        alert("Resposta não reconhecida, retornando")
+                    }
+                })
+            })
+
+            if (produtos.length > 1) {
+
+                /* função de calcudo reduce */
+                function calcTotal(array, propriedade) {
+                    return array.reduce((total, atual) => {
+                        return total += Number(atual[propriedade]);
+                    }, 0)
+
+                }
+
+                const precoTotal = produtos.reduce((total, atual) => {
+                    return total + (atual.preco * atual.quantidade);
+                }, 0)
+                const qntTotal = calcTotal(produtos, "quantidade");
+
+                const trTotal = document.createElement("tr");
+                const trTotalValores = document.createElement("tr");
+
+                trTotal.innerHTML = `
+                        <th>Total de Produto</th> 
+                        <th>Preço Total (R$)</th> 
+                        <th>Quantidade Total (UN)</th> 
+                `;
+
+
+                trTotalValores.innerHTML = `
+                        <td>${produtos.length}</td> 
+                        <td>R$ ${precoTotal}</td> 
+                        <td>${qntTotal}</td> 
+                `;
+
+                table.appendChild(trTotal);
+                table.appendChild(trTotalValores);
+            }
+
+            list.appendChild(table);
+        }
+
+        /* Chamada da função */
+        carregarProdutos(produtos);
+
+        /* Função para pesquisa de produtos */
+        function pesquisarProdutos(parametro) {
+
+            pesquisa.innerHTML = "";
+
+            const input = document.createElement("input");
+            const h3 = document.createElement("h3");
+
+            h3.textContent = "Barra de Pesquisa"
+            input.placeholder = "Digite o nome do produto";
+
+            pesquisa.appendChild(h3);
+            pesquisa.appendChild(input);
+
+            input.addEventListener("input", event => {
+
+                const busca = event.target.value.toLowerCase();
+
+                const produtosFiltrados = parametro.filter(produto => produto.produto.toLowerCase().includes(busca));
+
+                carregarProdutos(produtosFiltrados);
+            });
+        }
+
+        if (produtos.length != 0) {
+            pesquisarProdutos(produtos);
+        }
+
+        /* Verificação se já existe o produto no estoque */
+
+        function verificarProdutoExistente(parametro, nome) {
+
+            const existente = produtos.some(produto =>
+                produto[nome] === parametro[nome]
+            );
+
+            if (existente) {
+                alert("Produto ja cadastrado!");
+                return false;
+            }
+
+            return true;
+        }
+
+
+        /* Ordenar tabela */
+
+        function ordenarTabela(produtos, parametro) {
+            return [...produtos].sort((a, b) => b[parametro] - a[parametro]);
+        }
+    </script>
 </body>
 
 </html>
